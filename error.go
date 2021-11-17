@@ -38,19 +38,19 @@ func (err Error) Stack() string {
 func (err *Error) Trace(msg string) {
 	err.Msg = msg
 	if len(err.Stacks) == 0 {
-		err.Stacks = append(err.Stacks, fmt.Sprintf("%s %s", err.runtime(), msg))
+		err.Stacks = append(err.Stacks, fmt.Sprintf("%s %s", err.runtime(3), msg))
 	} else {
 		stack := ""
 		for i := 0; i < len(err.Stacks); i++ {
 			stack += " "
 		}
-		stack += "|- " + err.runtime() + " " + msg
+		stack += "|- " + err.runtime(2) + " " + msg
 		err.Stacks = append(err.Stacks, stack)
 	}
 }
 
-func (err Error) runtime() string {
-	_, file, line, _ := runtime.Caller(3)
+func (err Error) runtime(skip int) string {
+	_, file, line, _ := runtime.Caller(skip)
 	return fmt.Sprintf("%s:%d", file, line)
 }
 
